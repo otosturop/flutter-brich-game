@@ -107,6 +107,15 @@ class GameState extends State<Game> {
             }
           }
         }
+        // Zeminde iteleme durumu alt taşma sorunu çözümü
+        if (action == BlockMovement.DOWN) {
+          if (block!.y! + block!.height > BLOCK_Y) {
+            num plusDif = (block!.y! + block!.height) - BLOCK_Y;
+            for (int z = 0; z < plusDif; z++) {
+              block!.move(BlockMovement.UP);
+            }
+          }
+        }
 
         //Reverse action if the block hits other block
         for (var oldSubBlock in oldSubBlocks!) {

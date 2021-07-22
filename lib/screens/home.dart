@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tetris/componets/left_menu.dart';
+import 'package:tetris/controllers/timer_controller.dart';
+import 'package:tetris/controllers/user_controller.dart';
 
 class Home extends StatelessWidget {
+  final UserController userController = Get.put(UserController());
+  final TimerController timerController = Get.put(TimerController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,16 +45,25 @@ class Home extends StatelessWidget {
                             color: Colors.black,
                           ),
                           'Adı Soyadı',
-                          'Bulunamadı'),
+                          userController.isAnyUser.value
+                              ? userController.fullName.value.toString()
+                              : 'Bulunamadı'),
                       homeCard(
                           Icon(Icons.emoji_people,
                               size: 30, color: Colors.black),
                           'Kullanıcı Adı',
-                          'Bulunamadı'),
+                          userController.isAnyUser.value
+                              ? userController.userName.value.toString()
+                              : 'Bulunamadı'),
                       homeCard(
                           Icon(Icons.emoji_events,
                               size: 30, color: Colors.black),
                           'Sıralamam',
+                          '**'),
+                      homeCard(
+                          Icon(Icons.emoji_events,
+                              size: 30, color: Colors.black),
+                          'En Yüksek Skor',
                           '**'),
                       gameRightCard(),
                     ],
@@ -96,37 +110,27 @@ class Home extends StatelessWidget {
         elevation: 4,
         child: Column(
           children: [
-            ListTile(
-              leading: Icon(
-                Icons.volunteer_activism,
-                size: 30,
-                color: Colors.black,
-              ),
-              title: Text(
-                '02:46:58',
-                textAlign: TextAlign.center,
-              ),
-              subtitle: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.local_fire_department,
-                    color: Colors.red,
-                    size: 18,
-                  ),
-                  Icon(
-                    Icons.local_fire_department,
-                    color: Colors.red,
-                    size: 18,
-                  ),
-                  Icon(
-                    Icons.local_fire_department,
-                    color: Colors.red,
-                    size: 18,
-                  ),
-                ],
-              ),
-            ),
+            Obx(() {
+              return ListTile(
+                leading: Icon(
+                  Icons.volunteer_activism,
+                  size: 30,
+                  color: Colors.black,
+                ),
+                title: timerController.countDown(),
+                subtitle: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var x = 0; x < timerController.right.value; x++)
+                      Icon(
+                        Icons.local_fire_department,
+                        color: Colors.red,
+                        size: 18,
+                      ),
+                  ],
+                ),
+              );
+            })
           ],
         ),
       ),

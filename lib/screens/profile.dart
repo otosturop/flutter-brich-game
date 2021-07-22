@@ -109,6 +109,7 @@ class _ProfileState extends State<Profile> {
       var isInsert = await userController.insertUser();
       if (isInsert?.status ?? false) {
         print("userId: " + isInsert!.userId.toString());
+        userController.setMemoryUser(isInsert.userId);
         showToastMessage("kaydetme işlemi başarıyla gerçekleşti", Colors.green);
       } else {
         showToastMessage("kaydetme işlemi başarısız oldu.", Colors.red);
