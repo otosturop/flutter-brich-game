@@ -64,7 +64,9 @@ class Home extends StatelessWidget {
                           Icon(Icons.emoji_events,
                               size: 30, color: Colors.black),
                           'En Yüksek Skor',
-                          '**'),
+                          userController.isAnyUser.value
+                              ? userController.score.value.toString()
+                              : '0'),
                       gameRightCard(),
                     ],
                   ),

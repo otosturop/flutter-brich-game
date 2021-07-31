@@ -5,6 +5,7 @@ import 'package:tetris/componets/next_block.dart';
 import 'package:tetris/componets/score_bar.dart';
 import 'package:tetris/controllers/tetris_controller.dart';
 import 'package:get/get.dart';
+import 'package:tetris/helper/dialog_helper.dart';
 
 class Tetris extends StatefulWidget {
   @override
@@ -59,9 +60,13 @@ class _TetrisState extends State<Tetris> {
                           Obx(() {
                             return ElevatedButton(
                               onPressed: () {
-                                tetrisController.isPlaying.value
-                                    ? _keyGame.currentState!.endGame()
-                                    : _keyGame.currentState!.startGame();
+                                if (!tetrisController.isUser.value) {
+                                  DialogHelper.exit(context);
+                                } else {
+                                  tetrisController.isPlaying.value
+                                      ? _keyGame.currentState!.endGame()
+                                      : _keyGame.currentState!.startGame();
+                                }
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,

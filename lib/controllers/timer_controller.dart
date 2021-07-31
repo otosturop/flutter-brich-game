@@ -21,6 +21,8 @@ class TimerController extends SuperController {
     super.onClose();
   }
 
+  void decreaseRight() => right.value--;
+
   void onEnd() {
     if (right.value < 5) {
       right.value = right.value + 1;
@@ -40,7 +42,7 @@ class TimerController extends SuperController {
         onEnd: onEnd,
         widgetBuilder: (_, CurrentRemainingTime? time) {
           if (time == null) {
-            return Text('Game over');
+            return Text('Haklar Doldu!');
           }
           return Text(
               '${time.hours ?? "00"} : ${time.min ?? "00"} : ${time.sec}');

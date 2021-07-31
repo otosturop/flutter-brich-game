@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tetris/controllers/tetris_controller.dart';
 import 'package:tetris/data/user_api.dart';
 import 'package:tetris/models/UserModel.dart';
 
@@ -8,9 +9,11 @@ class UserController extends GetxController {
   var userId = ''.obs;
   var userName = ''.obs;
   var email = ''.obs;
+  var score = 0.obs;
   var loadingInfo = false.obs;
-  var isAnyUser = true.obs;
+  var isAnyUser = false.obs;
   UserApi _userApi = UserApi();
+  final TetrisController tetrisController = Get.put(TetrisController());
 
   Future getUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -22,6 +25,7 @@ class UserController extends GetxController {
       fullName.value = prefs.getString('fullName')!;
       userName.value = prefs.getString('userName')!;
       email.value = prefs.getString('email')!;
+      score.value = prefs.getInt('score')!;
     }
   }
 
@@ -49,5 +53,7 @@ class UserController extends GetxController {
     pre.setString('fullName', fullName.value.toString());
     pre.setString('userName', userName.value.toString());
     pre.setString('email', email.value.toString());
+    pre.setInt('score', 0);
+    tetrisController.onInit();
   }
 }

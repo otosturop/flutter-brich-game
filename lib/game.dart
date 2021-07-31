@@ -7,6 +7,8 @@ import 'package:tetris/block.dart';
 import 'package:tetris/sub_block.dart';
 import 'package:tetris/controllers/tetris_controller.dart';
 
+import 'controllers/timer_controller.dart';
+
 enum Collision { LANDED, LANDED_BLOCK, HIT_WALL, HIT_BLOCK, NONE }
 
 const BLOCK_X = 10;
@@ -28,6 +30,7 @@ class GameState extends State<Game> {
   Duration duration = Duration(milliseconds: REFRESH_RATE);
   GlobalKey _keyGameArea = GlobalKey();
   final TetrisController tetrisController = Get.put(TetrisController());
+  final TimerController timerController = Get.put(TimerController());
 
   BlockMovement? action;
   Block? block;
@@ -74,6 +77,7 @@ class GameState extends State<Game> {
     block = getNewBlock();
 
     timer = Timer.periodic(duration, onPlay);
+    timerController.decreaseRight();
   }
 
   void endGame() {
@@ -247,7 +251,7 @@ class GameState extends State<Game> {
         ));
   }
 
-  drawBloks() {
+  drawBlocks() {
     if (block == null) return null;
     List<Positioned> subBlocks = [];
 
@@ -264,6 +268,7 @@ class GameState extends State<Game> {
 
     if (isGameOver) {
       subBlocks.add(getGameOverRect());
+      tetrisController.gameOver();
     }
 
     return Stack(children: subBlocks);
@@ -329,7 +334,7 @@ class GameState extends State<Game> {
               border: Border.all(
                   width: GAME_AREA_BORDER_WIDTH, color: Colors.indigoAccent),
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          child: drawBloks(),
+          child: drawBlocks(),
         ),
       ),
     );
