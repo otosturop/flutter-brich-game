@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tetris/screens/arrangement.dart';
 import 'package:tetris/screens/home.dart';
 import 'package:tetris/screens/profile.dart';
 import 'package:tetris/screens/tetris.dart';
@@ -41,7 +42,9 @@ class LeftMenu extends StatelessWidget {
           Expanded(
             flex: 2,
             child: menuButton(
-                'Sıralamalar', Colors.orange, Colors.yellow.shade700, () {}),
+                'Sıralamalar', Colors.orange, Colors.yellow.shade700, () {
+              Get.to(() => Arragement());
+            }),
           ),
           Expanded(
             flex: 2,

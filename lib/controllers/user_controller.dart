@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tetris/controllers/tetris_controller.dart';
 import 'package:tetris/data/user_api.dart';
 import 'package:tetris/models/UserModel.dart';
+import 'package:tetris/models/UsersScoreModel.dart';
 
 class UserController extends GetxController {
   var fullName = ''.obs;
@@ -12,6 +13,10 @@ class UserController extends GetxController {
   var score = 0.obs;
   var loadingInfo = false.obs;
   var isAnyUser = false.obs;
+  var usersScore = <Users>[].obs;
+  var userArrangement = "".obs;
+  var isLoading = false.obs;
+
   UserApi _userApi = UserApi();
   final TetrisController tetrisController = Get.put(TetrisController());
 
@@ -33,6 +38,7 @@ class UserController extends GetxController {
   void onInit() async {
     getUserId();
     super.onInit();
+    fetchUserScore();
   }
 
   void setFullName(value) => fullName.value = value;
@@ -45,6 +51,17 @@ class UserController extends GetxController {
     UserModel? stat =
         await _userApi.insertUser(fullName.value, email.value, userName.value);
     return stat;
+  }
+
+  Future<UsersScoreModel?> fetchUserScore() async {
+    isLoading(false);
+    UsersScoreModel? fetchUsersScore = await _userApi.fetchUsersScore();
+    usersScore.value = fetchUsersScore!.users!;
+    var myScore = usersScore.firstWhere((user) => user.id == userId.value);
+    userArrangement.value = (usersScore.indexOf(myScore) + 1).toString();
+    isLoading(true);
+    print(myScore.fullName);
+    print("sıram: " + userArrangement.value);
   }
 
   void setMemoryUser(userId) async {

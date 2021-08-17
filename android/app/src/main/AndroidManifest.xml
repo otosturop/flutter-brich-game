@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.otosturop.tetris">
    <application
-        android:label="tetris"
+        android:label="Tetris Şampiyonası"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -55,11 +55,21 @@ class Home extends StatelessWidget {
                           userController.isAnyUser.value
                               ? userController.userName.value.toString()
                               : 'Bulunamadı'),
-                      homeCard(
-                          Icon(Icons.emoji_events,
-                              size: 30, color: Colors.black),
-                          'Sıralamam',
-                          '**'),
+                      Obx(() {
+                        if (userController.isLoading.value) {
+                          return homeCard(
+                              Icon(Icons.emoji_events,
+                                  size: 30, color: Colors.black),
+                              'Sıralamam',
+                              userController.userArrangement.value);
+                        } else {
+                          return homeCard(
+                              Icon(Icons.emoji_events,
+                                  size: 30, color: Colors.black),
+                              'Sıralamam',
+                              'Bulunamadı');
+                        }
+                      }),
                       homeCard(
                           Icon(Icons.emoji_events,
                               size: 30, color: Colors.black),
