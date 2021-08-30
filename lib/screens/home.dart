@@ -11,7 +11,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Anasayfa'),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -30,56 +30,58 @@ class Home extends StatelessWidget {
                 decoration: new BoxDecoration(color: Colors.white10),
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Tetris Şampiyonasına Hoşgeldiniz",
-                        style: Theme.of(context).textTheme.headline6,
-                        textAlign: TextAlign.center,
-                      ),
-                      homeCard(
-                          Icon(
-                            Icons.person,
-                            size: 30,
-                            color: Colors.black,
-                          ),
-                          'Adı Soyadı',
-                          userController.isAnyUser.value
-                              ? userController.fullName.value.toString()
-                              : 'Bulunamadı'),
-                      homeCard(
-                          Icon(Icons.emoji_people,
-                              size: 30, color: Colors.black),
-                          'Kullanıcı Adı',
-                          userController.isAnyUser.value
-                              ? userController.userName.value.toString()
-                              : 'Bulunamadı'),
-                      Obx(() {
-                        if (userController.isLoading.value) {
-                          return homeCard(
-                              Icon(Icons.emoji_events,
-                                  size: 30, color: Colors.black),
-                              'Sıralamam',
-                              userController.userArrangement.value);
-                        } else {
-                          return homeCard(
-                              Icon(Icons.emoji_events,
-                                  size: 30, color: Colors.black),
-                              'Sıralamam',
-                              'Bulunamadı');
-                        }
-                      }),
-                      homeCard(
-                          Icon(Icons.emoji_events,
-                              size: 30, color: Colors.black),
-                          'En Yüksek Skor',
-                          userController.isAnyUser.value
-                              ? userController.score.value.toString()
-                              : '0'),
-                      gameRightCard(),
-                    ],
-                  ),
+                  child: Obx(() {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Tetris Şampiyonasına Hoşgeldiniz",
+                          style: Theme.of(context).textTheme.headline6,
+                          textAlign: TextAlign.center,
+                        ),
+                        homeCard(
+                            Icon(
+                              Icons.person,
+                              size: 30,
+                              color: Colors.black,
+                            ),
+                            'Adı Soyadı',
+                            userController.isAnyUser.value
+                                ? userController.fullName.value.toString()
+                                : 'Bulunamadı'),
+                        homeCard(
+                            Icon(Icons.emoji_people,
+                                size: 30, color: Colors.black),
+                            'Kullanıcı Adı',
+                            userController.isAnyUser.value
+                                ? userController.userName.value.toString()
+                                : 'Bulunamadı'),
+                        Obx(() {
+                          if (userController.isLoading.value) {
+                            return homeCard(
+                                Icon(Icons.emoji_events,
+                                    size: 30, color: Colors.black),
+                                'Sıralamam',
+                                userController.userArrangement.value);
+                          } else {
+                            return homeCard(
+                                Icon(Icons.emoji_events,
+                                    size: 30, color: Colors.black),
+                                'Sıralamam',
+                                'Bulunamadı');
+                          }
+                        }),
+                        homeCard(
+                            Icon(Icons.emoji_events,
+                                size: 30, color: Colors.black),
+                            'En Yüksek Skor',
+                            userController.isAnyUser.value
+                                ? userController.score.value.toString()
+                                : '0'),
+                        gameRightCard(),
+                      ],
+                    );
+                  }),
                 ),
               ),
             )

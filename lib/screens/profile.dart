@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:tetris/componets/foundation_button.dart';
 import 'package:tetris/componets/left_menu.dart';
 import 'package:tetris/controllers/user_controller.dart';
+import 'dart:io' show Platform;
+import 'package:device_info_plus/device_info_plus.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);
@@ -14,12 +16,13 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final UserController userController = Get.put(UserController());
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Profil'),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -65,7 +68,15 @@ class _ProfileState extends State<Profile> {
                           userController.email.value, (value) {
                         userController.setEmail(value);
                       }),
-                      FoundationButton("Kaydet", () => _validation()),
+                      Obx(() {
+                        if (userController.isAnyUser.value) {
+                          return FoundationButton(
+                              "Güncelle", () => _updateUser());
+                        } else {
+                          return FoundationButton(
+                              "Kaydet", () => _validation());
+                        }
+                      }),
                     ],
                   ),
                 ),
@@ -106,13 +117,60 @@ class _ProfileState extends State<Profile> {
       showToastMessage(
           "Lütfen profil bilgilerini eksiksiz giriniz", Colors.red);
     } else {
-      var isInsert = await userController.insertUser();
+      String device = "";
+      if (Platform.isAndroid) {
+        // Android-specific code
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        print('Running on ${androidInfo.brand}');
+        device = '${androidInfo.brand} - ${androidInfo.model}';
+      } else if (Platform.isIOS) {
+        // iOS-specific code
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        print('Running on ${iosInfo.utsname.machine}');
+        device = iosInfo.utsname.machine.toString();
+      }
+
+      var isInsert = await userController.insertUser(device);
       if (isInsert?.status ?? false) {
         print("userId: " + isInsert!.userId.toString());
         userController.setMemoryUser(isInsert.userId);
-        showToastMessage("kaydetme işlemi başarıyla gerçekleşti", Colors.green);
+        userController.getUserId();
+        showToastMessage("Kaydetme işlemi başarıyla gerçekleşti", Colors.green);
       } else {
-        showToastMessage("kaydetme işlemi başarısız oldu.", Colors.red);
+        showToastMessage("Kaydetme işlemi başarısız oldu.", Colors.red);
+      }
+    }
+  }
+
+  _updateUser() async {
+    if (userController.email.value == "" ||
+        userController.userName.value == "" ||
+        userController.fullName.value == "") {
+      showToastMessage(
+          "Lütfen profil bilgilerini eksiksiz giriniz", Colors.red);
+    } else {
+      String device = "";
+      if (Platform.isAndroid) {
+        // Android-specific code
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        print('Running on ${androidInfo.brand}');
+        device = '${androidInfo.brand} - ${androidInfo.model}';
+      } else if (Platform.isIOS) {
+        // iOS-specific code
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        print('Running on ${iosInfo.utsname.machine}');
+        device = iosInfo.utsname.machine.toString();
+      }
+
+      var isUpdate = await userController.updateUser(device);
+      if (isUpdate?.status ?? false) {
+        print("userId: " + isUpdate!.userId.toString());
+
+        userController.setMemoryUser(isUpdate.userId);
+        showToastMessage(
+            "Güncelleme işlemi başarıyla gerçekleşti", Colors.green);
+      } else {
+        showToastMessage("Güncelleme işlemi başarısız oldu.", Colors.red);
       }
     }
   }

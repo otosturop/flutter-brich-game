@@ -48,7 +48,7 @@ class LeftMenu extends StatelessWidget {
           ),
           Expanded(
             flex: 2,
-            child: menuButton('Tetris', Colors.purple, Colors.orange, () {
+            child: menuButton('Oyna', Colors.purple, Colors.orange, () {
               Get.to(() => Tetris());
             }),
           ),

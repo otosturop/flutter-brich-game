@@ -24,7 +24,7 @@ class TimerController extends SuperController {
   void decreaseRight() => right.value--;
 
   void onEnd() {
-    if (right.value < 5) {
+    if (right.value < 3) {
       right.value = right.value + 1;
       print('onEnd');
       this.endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;

@@ -24,7 +24,9 @@ class UserController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userId')) {
       isAnyUser.value = false;
+      print("user id yok");
     } else {
+      print("user id var: " + prefs.getString('fullName')!);
       isAnyUser.value = true;
       userId.value = prefs.getString('userId')!;
       fullName.value = prefs.getString('fullName')!;
@@ -47,9 +49,15 @@ class UserController extends GetxController {
 
   void setEmail(value) => email.value = value;
 
-  Future<UserModel?> insertUser() async {
-    UserModel? stat =
-        await _userApi.insertUser(fullName.value, email.value, userName.value);
+  Future<UserModel?> insertUser(String device) async {
+    UserModel? stat = await _userApi.insertUser(
+        fullName.value, email.value, userName.value, device);
+    return stat;
+  }
+
+  Future<UserModel?> updateUser(String device) async {
+    UserModel? stat = await _userApi.updateUser(
+        userId.value, fullName.value, email.value, userName.value, device);
     return stat;
   }
 
@@ -71,6 +79,6 @@ class UserController extends GetxController {
     pre.setString('userName', userName.value.toString());
     pre.setString('email', email.value.toString());
     pre.setInt('score', 0);
-    tetrisController.onInit();
+    tetrisController.isUser.value = true;
   }
 }

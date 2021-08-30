@@ -22,9 +22,7 @@ class TetrisController extends GetxController {
 
   void setNextBlock(Block nextBlock) => this.nextBlock = nextBlock;
 
-  void setIsNewBlock() {
-    isNewBlock.value = !isNewBlock.value;
-  }
+  void setIsNewBlock() => isNewBlock.value = !isNewBlock.value;
 
   @override
   void onInit() {
